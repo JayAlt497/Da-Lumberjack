@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public GameObject EventSystem; // Reference to the game's EventSystem
     public TextMeshProUGUI scoreText; // Reference to the text UI element that displays the player's score
     public Animator anim; // Reference to the player's animator component
+    private Tree currTreeScript;
 
     // Movement
     public float speed; // Speed of the player
@@ -49,6 +50,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currTree != null)
+            currTreeScript = currTree.GetComponent<Tree>();
+
         timeSinceTempDrop += Time.deltaTime;
         if (timeSinceTempDrop > 1)
         {
@@ -56,6 +60,7 @@ public class PlayerController : MonoBehaviour
             externalTemp--;
         }
 
+        playerTempAdjust();
         // Check if the player has frozen to death
         if (internalTemp < FREEZE_TEMP)
         {
@@ -101,12 +106,27 @@ public class PlayerController : MonoBehaviour
         if (!inRange || currTree == null)
             return;
 
-        currTree.GetComponent<Tree>().treeHP -= damage;
+        currTreeScript.setTreeHP(currTreeScript.getTreeHP() - damage);
 
         // Check if the tree has been chopped down
-        if (currTree.GetComponent<Tree>().treeHP <= 0)
+        if (currTree.GetComponent<Tree>().getTreeHP() <= 0)
         {
             currTree.GetComponent<Tree>().Respawn(score);
+            scoring();
+        }
+    }
+    // Damages the tree player is close enough too
+    public void Chop(float swingPercent)
+    {
+        if (!inRange || currTree == null)
+            return;
+        
+        currTreeScript.setTreeHP(currTreeScript.getTreeHP() - damage * swingPercent);
+        Debug.Log(currTreeScript.getTreeHP());
+        // Check if the tree has been chopped down
+        if (currTreeScript.getTreeHP() <= 0)
+        {
+            currTreeScript.Respawn(score);
             scoring();
         }
     }

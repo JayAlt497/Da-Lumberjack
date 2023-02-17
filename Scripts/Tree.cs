@@ -10,13 +10,14 @@ using UnityEngine;
 ///
 public class Tree : MonoBehaviour
 {
-    public int treeHP;
+    public float startTreeHP;
+    private float treeHP;
 
     private Vector2 prevTreePos;
     // Start is called before the first frame update
     void Start()
     {
-        treeHP = 25;
+        treeHP = startTreeHP;
         prevTreePos = transform.position;
 
     }
@@ -29,25 +30,16 @@ public class Tree : MonoBehaviour
     //resets the next tree with a certain amount of hp base on player score
     public void Respawn(int currPlayerScore)
     {
-        transform.position = new Vector2(prevTreePos.x + 5, prevTreePos.y);
+        transform.position = new Vector2(prevTreePos.x + 5f, prevTreePos.y);
         prevTreePos = transform.position;
-        treeHP = 25;
-        switch(currPlayerScore/10)
-        {
-            case 0:
-                break;
-            case 1:
-                treeHP += 5;
-                break;
-            case 2:
-                treeHP += 10;
-                break;
-            case 3:
-                treeHP += 15;
-                break;
-            default: 
-                treeHP += 15;
-                break;
-        }
+        treeHP = startTreeHP + currPlayerScore * 10;
+    }
+    public float getTreeHP()
+    {
+        return treeHP; 
+    }
+    public void setTreeHP(float val)
+    {
+        treeHP = val;
     }
 }

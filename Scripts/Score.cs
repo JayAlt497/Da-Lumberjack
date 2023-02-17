@@ -21,7 +21,7 @@ public class Score : MonoBehaviour
 
     public void updateScore(int score)
     {
-        Debug.Log(score);
+        //Debug.Log(score);
         scoreText.SetText("Score: " + score);
     }
 }
